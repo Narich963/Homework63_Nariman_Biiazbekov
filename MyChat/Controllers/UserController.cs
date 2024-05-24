@@ -38,8 +38,9 @@ public class UserController : Controller
             return NotFound();
         }
 
-        User user = await _userManager.FindByNameAsync(name);
-        Console.WriteLine(User.IsInRole("admin"));
+        User user = await _context.Users
+            .Include(u => u.Messages)
+            .FirstOrDefaultAsync(u => u.UserName == name);
         if (user != null)
         {
             return View(user);

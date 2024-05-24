@@ -10,4 +10,9 @@ public class User : IdentityUser<int>
 	[Required]
 	public string Avatar { get; set; }
 
+	public List<Message> Messages { get; set; }
+    public User()
+    {
+        Messages = new List<Message>();
+    }
 }

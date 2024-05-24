@@ -1,0 +1,73 @@
+﻿@model List<Message>
+
+@{
+    Layout = "_Layout";
+}
+
+<form method="post">
+    <input id="body" type="text" maxlength="100"/>
+    <button id="submit" onclick="sendMessage('@User.Identity.Name')" type="submit">Send</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Body
+            </th>
+            <th>
+                User
+            </th>
+            <th>
+                Created
+            </th>
+        </tr>
+    </thead>
+    <tbody id=messages>
+
+    </tbody>
+</table>
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous">
+</script>
+
+<script>
+    $('body').on('input', 'input[type="text"][maxlength]', function () {
+        if (this.value.length > this.maxlength) {
+            this.value = this.value.slice(0, this.maxlength);
+        }
+    })
+    function sendMessage(username) {
+        event.preventDefault();
+        $.ajax({
+            url: '@Url.Action("CreateAjax", "Message")',
+            type: 'POST',
+            data: { 'username': username, 'body': $('#body').val() },
+            success: console.log('good'),
+            error: console.log('error'),
+        });
+        return false;
+    }
+
+    function loadMessages() {
+        $.ajax({
+            url: '@Url.Action("GetMessages", "Message")',
+            type: 'GET',
+            success: function (data) {
+                $('#messages').html(data);
+                console.log('GOOD');
+            },
+        });
+    }
+    loadMessages();
+
+    setInterval(loadMessages, 5000);
+
+    
+</script>

@@ -1,0 +1,11 @@
+﻿@model List<Message>
+
+@foreach (var message in Model)
+{
+    <tr>
+        <td>@message.Id</td>
+        <td>@message.Body</td>
+        <td>@message.User.UserName</td>
+        <td>@message.Created</td>
+    </tr>
+}
