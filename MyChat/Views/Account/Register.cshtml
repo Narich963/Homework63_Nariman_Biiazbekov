@@ -1,0 +1,61 @@
+﻿@using MyChat.ViewModels
+@model RegisterViewModel
+
+@{
+    Layout = "_Layout";
+}
+
+<form asp-action="Register" method="post" asp-antiforgery="true">
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Username</label>
+        <input asp-for="Username" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        <span asp-validation-for="Username"></span>
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Email address</label>
+        <input asp-for="Email" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Avatar Url</label>
+        <input asp-for="Avatar" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        <span asp-validation-for="Avatar"></span>
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Birth date</label>
+        <input asp-for="BirthDate" type="date" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        <span asp-validation-for="BirthDate"></span>
+    </div>
+    <div class="mb-3 password">
+        <label for="exampleInputPassword1" class="form-label">Password</label>
+        <input asp-for="Password" type="password" class="form-control" id="password-input">
+        <a href="#" class="password-control mt-4"></a>
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Confirm Password</label>
+        <input asp-for="ConfirmPassword" type="password" class="form-control">
+        <span asp-validation-for="ConfirmPassword"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous">
+</script>
+
+<script>
+    $('form').on('click', '.password-control', function () {
+        if ($('#password-input').attr('type') == 'password') {
+            $(this).addClass('view');
+            $('#password-input').attr('type', 'text');
+        }
+        else {
+            $(this).removeClass('view');
+            $('#password-input').attr('type', 'password');
+        }
+        return false;
+    });
+</script>

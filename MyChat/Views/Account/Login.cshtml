@@ -1,0 +1,53 @@
+﻿@using MyChat.ViewModels
+@model LoginViewModel 
+
+@{
+    Layout = "_Layout";
+}
+
+
+<form asp-action="Login" method="post" asp-antiforgery="true">
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Username or email</label>
+        <input asp-for="Login" type="text" class="form-control" id="exampleInputEmail1">
+        <span asp-validation-for="Login"></span>
+    </div>
+
+    <div class="row g-3 align-items-center">
+        <div class="col-auto">
+            <label for="inputPassword6" class="col-form-label">Password</label>
+        </div>
+        <div class="password col-auto">
+            <input asp-for="Password" type="password" id="password-input" class="form-control" aria-describedby="passwordHelpInline">
+            <a href="#" class="password-control"></a>
+            <span asp-validation-for="Password"></span>
+        </div>
+        <div class="col-auto">
+            <span id="passwordHelpInline" class="form-text">
+                Must be over 6 characters long, contain upper case, lower case and digit.
+            </span>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<script 
+    src="https://code.jquery.com/jquery-3.7.1.js"
+    integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous">
+</script>
+
+<script>
+    $('form').on('click', '.password-control', function () {
+        if ($('#password-input').attr('type') == 'password') {
+            $(this).addClass('view');
+            $('#password-input').attr('type', 'text');
+        }
+        else {
+            $(this).removeClass('view');
+            $('#password-input').attr('type', 'password');
+        }
+        return false;
+    });
+</script>

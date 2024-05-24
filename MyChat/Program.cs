@@ -13,10 +13,11 @@ builder.Services
 	.AddDbContext<MyChatContext>(opts => opts.UseNpgsql(connection))
 	.AddIdentity<User, IdentityRole<int>>(opts =>
 	{
-		opts.Password.RequiredLength = 7;
+		opts.Password.RequiredLength = 6;
 		opts.Password.RequireUppercase = true;
 		opts.Password.RequireLowercase = true;
 		opts.Password.RequireDigit = true;
+		opts.Password.RequireNonAlphanumeric = false;
 	})
 	.AddEntityFrameworkStores<MyChatContext>();
 
@@ -28,7 +29,6 @@ try
 {
 	var userManager = services.GetRequiredService<UserManager<User>>();
 	var roleManager = services.GetRequiredService<RoleManager<IdentityRole<int>>>();
-
 	await AdminInitializer.SeedAdminUser(roleManager, userManager);
 }
 catch (Exception ex)
