@@ -144,6 +144,7 @@ public class UserController : Controller
 
         var user = await _context.Users
             .FirstOrDefaultAsync(m => m.Id == id);
+        
         if (user == null)
         {
             return NotFound();
@@ -167,7 +168,47 @@ public class UserController : Controller
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
+    [Authorize(Roles = "admin")]
+    public async Task<IActionResult> Block(int? id)
+    {
+        if (id != null)
+        {
+            User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (user != null)
+            {
+                var lockUserTask = await _userManager.SetLockoutEnabledAsync(user, true);
 
+                var lockDateTask = await _userManager.SetLockoutEndDateAsync(user, DateTime.MaxValue.ToUniversalTime());
+
+                if (lockDateTask.Succeeded && lockUserTask.Succeeded)
+                {
+                    Console.WriteLine(user.LockoutEnabled + " " + user.LockoutEnd);
+                    return RedirectToAction("Index");
+                }
+            }
+        }
+        return NotFound();
+    }
+    [Authorize(Roles = "admin")]
+    public async Task<IActionResult> UnBlock(int? id)
+    {
+        if (id != null)
+        {
+            User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (user != null)
+            {
+                var lockDateTask = await _userManager.SetLockoutEndDateAsync(user, (DateTime.UtcNow - TimeSpan.FromDays(1)).ToUniversalTime());
+                var lockUserTask = await _userManager.SetLockoutEnabledAsync(user, false);
+
+                if (lockDateTask.Succeeded && lockUserTask.Succeeded)
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+        }
+        return NotFound();
+
+    }
     private bool UserExists(int id)
     {
         return _context.Users.Any(e => e.Id == id);

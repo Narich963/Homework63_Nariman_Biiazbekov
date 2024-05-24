@@ -51,8 +51,15 @@
             <td>
                 <a asp-action="Details" asp-route-name="@item.UserName">Details</a> |
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                @if (item.LockoutEnabled == true && item.LockoutEnd > DateTime.UtcNow)
+                {
+                     <a asp-action="UnBlock" asp-route-id="@item.Id">Unblock</a>
+                }
+                else
+                {
+                    <a asp-action="Block" asp-route-id="@item.Id">Block</a>
+                }
             </td>
         </tr>
 }

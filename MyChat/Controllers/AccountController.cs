@@ -29,6 +29,10 @@ public class AccountController : Controller
             User user = await _userManager.FindByEmailAsync(model.Login) ?? await _userManager.FindByNameAsync(model.Login);
             if (user != null)
             {
+                if (user.LockoutEnabled == true && user.LockoutEnd > DateTime.UtcNow)
+                {
+                    ModelState.AddModelError("", "Ваш аккаунт заблокирован");
+                }
                 SignInResult result = await _signInManager.PasswordSignInAsync(
                     user,
                     model.Password,
@@ -40,7 +44,7 @@ public class AccountController : Controller
                 }
                 return View(model);
             }
-			ModelState.AddModelError("", "Invalid Login or password");
+			ModelState.AddModelError("", "Неверный логин или пароль");
 		}
         return View(model);
     }
