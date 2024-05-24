@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MyChat.Models;
+using MyChat.ViewModels;
 
 namespace MyChat.Controllers;
 
@@ -61,15 +62,41 @@ public class UserController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "admin")]
-    public async Task<IActionResult> Create(User user)
+    public async Task<IActionResult> Create(RegisterViewModel model)
     {
         if (ModelState.IsValid)
         {
-            _context.Add(user);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if ((DateTime.UtcNow - model.BirthDate).TotalDays < 18 * 365)
+            {
+                ModelState.AddModelError("", "Недопустимый возраст регистрации");
+                return View(model);
+            }
+            if (_userManager.Users.Any(u => u.Email == model.Email || u.UserName == model.Username))
+            {
+                ModelState.AddModelError("", "Пользователь с тамим именем или эл. почтой уже существует");
+                return View(model);
+            }
+            User? user = new()
+            {
+                Email = model.Email,
+                UserName = model.Username,
+                Avatar = model.Avatar,
+                BirthDate = model.BirthDate.ToUniversalTime()
+            };
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, "user");
+                return RedirectToAction("Index", "User");
+            }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
         }
-        return View(user);
+        return View(model);
+        
     }
 
     // GET: User/Edit/5

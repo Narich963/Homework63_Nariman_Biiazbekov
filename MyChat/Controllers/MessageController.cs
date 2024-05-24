@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyChat.Models;
 
 namespace MyChat.Controllers;
 
+[Authorize]
 public class MessageController : Controller
 {
     private readonly UserManager<User> _userManager;

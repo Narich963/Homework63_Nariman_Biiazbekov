@@ -1,11 +1,29 @@
 ﻿@model List<Message>
 
-@foreach (var message in Model)
+@foreach (var msg in Model)
 {
-    <tr>
-        <td>@message.Id</td>
-        <td>@message.Body</td>
-        <td>@message.User.UserName</td>
-        <td>@message.Created</td>
-    </tr>
+    @if (msg.User.UserName == User.Identity.Name)
+    {
+        @* Мои сообщения *@
+        <div class="media media-chat media-chat-reverse">
+            <img class="avatar" src="@msg.User.Avatar" alt="...">
+            <div class="media-body">
+                <p>@msg.Body</p>
+                <p class="meta"><a asp-action="Details" asp-controller="User" asp-route-name="@msg.User.UserName">@msg.User.UserName</a></p>
+                <p class="meta text-dark"><time datetime="2018">@msg.Created.ToLongTimeString()</time></p>
+            </div>
+        </div>
+    }
+    else
+    {
+        @* Чужие сообщения *@
+        <div class="media media-chat">
+            <img class="avatar" src="@msg.User.Avatar" alt="...">
+            <div class="media-body">
+                <p>@msg.Body</p>
+                <p class="meta"><a asp-action="Details" asp-controller="User" asp-route-name="@msg.User.UserName">@msg.User.UserName</a></p>
+                <p class="meta"><time datetime="2018">@msg.Created.ToLongTimeString()</time></p>
+            </div>
+        </div>
+    }
 }

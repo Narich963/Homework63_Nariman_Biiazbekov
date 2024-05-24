@@ -1,35 +1,43 @@
-﻿@model List<Message>
-
+﻿
 @{
     Layout = "_Layout";
 }
 
-<form method="post">
-    <input id="body" type="text" maxlength="100"/>
-    <button id="submit" onclick="sendMessage('@User.Identity.Name')" type="submit">Send</button>
-</form>
+<link rel="stylesheet" href="~/css/chat.css"/>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js" />
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Id
-            </th>
-            <th>
-                Body
-            </th>
-            <th>
-                User
-            </th>
-            <th>
-                Created
-            </th>
-        </tr>
-    </thead>
-    <tbody id=messages>
 
-    </tbody>
-</table>
+<div class="page-content page-container" id="page-content">
+    <div class="padding">
+        <div class="row container d-flex justify-content-center">
+            <div class="col-md-6">
+                <div class="card card-bordered">
+                    <div class="card-header">
+                        <h4 class="card-title"><strong>Chat</strong></h4>
+                        <a class="btn btn-xs btn-secondary" href="#" data-abc="true">Let's Chat App</a>
+                    </div>
+
+
+                    <div class="ps-container ps-theme-default ps-active-y" id="chat-content" style="overflow-y: scroll !important; height:400px !important;">
+                        <div id="messages">
+
+                        </div>
+                        @* Сообщения *@
+                        <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;"><div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 0px; height: 0px; right: 2px;"><div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 2px;"></div></div>
+                    </div>
+
+                    <div class="publisher bt-1 border-light">
+                        <input id="body" maxlength="100" class="publisher-input" type="text" placeholder="Write something">
+                        <button id="submit" onclick="sendMessage('@User.Identity.Name')" type="submit">Send</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <script src="https://code.jquery.com/jquery-3.7.1.js"
