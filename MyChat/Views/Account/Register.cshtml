@@ -1,4 +1,6 @@
 ﻿@using MyChat.ViewModels
+@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer;
 @model RegisterViewModel
 
 @{
@@ -8,37 +10,37 @@
 <form asp-action="Register" method="post" asp-antiforgery="true">
     <div class="validation" asp-validation-summary="ModelOnly"></div>
     <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Username</label>
+        <label for="exampleInputEmail1" class="form-label">@Localizer["Username"]</label>
         <input asp-for="Username" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
         <span asp-validation-for="Username"></span>
     </div>
     <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Email address</label>
+        <label for="exampleInputEmail1" class="form-label">@Localizer["Email"]</label>
         <input asp-for="Email" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
         <span asp-validation-for="Email"></span>
     </div>
     <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Avatar Url</label>
+        <label for="exampleInputEmail1" class="form-label">@Localizer["Avatar"]</label>
         <input asp-for="Avatar" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
         <span asp-validation-for="Avatar"></span>
     </div>
     <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Birth date</label>
+        <label for="exampleInputEmail1" class="form-label">@Localizer["Birth"]</label>
         <input asp-for="BirthDate" type="date" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
         <span asp-validation-for="BirthDate"></span>
     </div>
     <div class="mb-3 password">
-        <label for="exampleInputPassword1" class="form-label">Password</label>
+        <label for="exampleInputPassword1" class="form-label">@Localizer["Password"]</label>
         <input asp-for="Password" type="password" class="form-control" id="password-input">
         <a href="#" class="password-control mt-4"></a>
         <span asp-validation-for="Password"></span>
     </div>
     <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Confirm Password</label>
+        <label for="exampleInputPassword1" class="form-label">@Localizer["Confirm"]</label>
         <input asp-for="ConfirmPassword" type="password" class="form-control">
         <span asp-validation-for="ConfirmPassword"></span>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary">@Localizer["Submit"]</button>
 </form>
 
 <script src="https://code.jquery.com/jquery-3.7.1.js"

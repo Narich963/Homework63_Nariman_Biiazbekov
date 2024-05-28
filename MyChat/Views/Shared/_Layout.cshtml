@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer loc;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -23,16 +25,16 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Message" asp-action="Chat">Чат</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Message" asp-action="Chat">@loc["Chat"]</a>
                             </li>
                             @if (User.IsInRole("admin"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Users</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">@loc["Users"]</a>
                                 </li>
                             }
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">@loc["Logout"]</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-action="Details" asp-controller="User"
@@ -42,10 +44,10 @@
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">@loc["Register"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">@loc["Login"]</a>
                             </li>
                         }
                     </ul>

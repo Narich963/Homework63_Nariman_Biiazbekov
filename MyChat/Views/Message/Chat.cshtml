@@ -1,4 +1,5 @@
-﻿
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer loc;
 @{
     Layout = "_Layout";
 }
@@ -29,8 +30,8 @@
                     </div>
 
                     <div class="publisher bt-1 border-light">
-                        <input id="body" maxlength="100" class="publisher-input" type="text" placeholder="Write something">
-                        <button id="submit" onclick="sendMessage('@User.Identity.Name')" type="submit">Send</button>
+                        <input id="body" maxlength="100" class="publisher-input" type="text" placeholder="@loc["Write"]">
+                        <button id="submit" onclick="sendMessage('@User.Identity.Name')" type="submit">@loc["Send"]</button>
                     </div>
 
                 </div>

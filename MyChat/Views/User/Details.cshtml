@@ -1,4 +1,6 @@
-﻿@model MyChat.Models.User
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer;
+@model MyChat.Models.User
 
 @{
     ViewData["Title"] = "Details";
@@ -13,13 +15,13 @@
             <p class="card-text">Email: @Model.Email</p>
         </div>
         <ul class="list-group list-group-flush">
-            <li class="list-group-item">Birth date: @Model.BirthDate.ToLongDateString()</li>
-            <li class="list-group-item">Кол-во сообщений: @Model.Messages.Count</li>
+            <li class="list-group-item">@Localizer["Birth"]: @Model.BirthDate.ToLongDateString()</li>
+            <li class="list-group-item">@Localizer["Count"]: @Model.Messages.Count</li>
         </ul>
         <div class="card-body">
             @if (User.Identity.Name == Model.UserName || User.IsInRole("admin"))
             {
-                <a asp-action="Edit" asp-route-id="@Model.Id" class="card-link">Edit profile</a>
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="card-link">@Localizer["Edit"]</a>
             }
         </div>
     </div>

@@ -1,12 +1,16 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using MyChat.Models;
 using MyChat.Services;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddLocalization(opts => opts.ResourcesPath = "Resourses");
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization();
 
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services
@@ -44,6 +48,19 @@ if (!app.Environment.IsDevelopment())
 	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 	app.UseHsts();
 }
+
+var supportedCultures = new[]
+{
+    new CultureInfo("en"),
+    new CultureInfo("ru")
+};
+
+app.UseRequestLocalization(new RequestLocalizationOptions()
+{
+    DefaultRequestCulture = new RequestCulture("ru"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
