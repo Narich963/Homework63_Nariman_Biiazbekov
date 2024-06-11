@@ -16,16 +16,19 @@ public class MessageController : Controller
         _context = context;
         _userManager = userManager;
     }
+    [ResponseCache(CacheProfileName = "NoCaching")]
     public IActionResult Chat()
     {
         return View();
     }
     [HttpGet]
+    [ResponseCache(CacheProfileName = "NoCaching")]
     public async Task<IActionResult> GetMessages()
     {
         var messages = await _context.Messages.Include(m => m.User).OrderByDescending(m => m.Created).Take(30).ToListAsync();
         return PartialView("_MessagesPartial", messages);
-    }  
+    }
+    [ResponseCache(CacheProfileName = "NoCaching")]
     public async Task<IActionResult> CreateAjax(string? username, string? body)
     {
         if (username != null && body != null)

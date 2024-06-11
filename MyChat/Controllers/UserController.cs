@@ -26,12 +26,14 @@ public class UserController : Controller
 
     // GET: User
     [Authorize(Roles = "admin")]
+    [ResponseCache(CacheProfileName = "NoCaching")]
     public async Task<IActionResult> Index()
     {
         return View(await _context.Users.ToListAsync());
     }
 
     // GET: User/Details/5
+    [ResponseCache(CacheProfileName = "Caching")]
     public async Task<IActionResult> Details(string? name)
     {
         if (name == null)
@@ -51,6 +53,7 @@ public class UserController : Controller
 
     // GET: User/Create
     [Authorize(Roles = "admin")]
+    [ResponseCache(CacheProfileName = "Caching")]
     public IActionResult Create()
     {
         return View();
@@ -62,6 +65,7 @@ public class UserController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "admin")]
+    [ResponseCache(CacheProfileName = "Caching")]
     public async Task<IActionResult> Create(RegisterViewModel model)
     {
         if (ModelState.IsValid)
@@ -100,6 +104,7 @@ public class UserController : Controller
     }
 
     // GET: User/Edit/5
+    [ResponseCache(CacheProfileName = "Caching")]
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null)
@@ -125,6 +130,7 @@ public class UserController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [ResponseCache(CacheProfileName = "Caching")]
     public async Task<IActionResult> Edit(int id, User user)
     {
         if (id != user.Id)
@@ -163,6 +169,7 @@ public class UserController : Controller
 
     // GET: User/Delete/5
     [Authorize(Roles = "admin")]
+    [ResponseCache(CacheProfileName = "Caching")]
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
@@ -185,6 +192,7 @@ public class UserController : Controller
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "admin")]
+    [ResponseCache(CacheProfileName = "Caching")]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
         var user = await _context.Users.FindAsync(id);
@@ -197,6 +205,7 @@ public class UserController : Controller
         return RedirectToAction(nameof(Index));
     }
     [Authorize(Roles = "admin")]
+    [ResponseCache(CacheProfileName = "NoCaching")]
     public async Task<IActionResult> Block(int? id)
     {
         if (id != null)
@@ -218,6 +227,7 @@ public class UserController : Controller
         return NotFound();
     }
     [Authorize(Roles = "admin")]
+    [ResponseCache(CacheProfileName = "NoCaching")]
     public async Task<IActionResult> UnBlock(int? id)
     {
         if (id != null)

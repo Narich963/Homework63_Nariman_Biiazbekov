@@ -1,17 +1,26 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using MyChat.Models;
 using MyChat.Services;
 using System.Globalization;
+using System.IO.Compression;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddLocalization(opts => opts.ResourcesPath = "Resourses");
-builder.Services.AddControllersWithViews()
-    .AddViewLocalization();
-
+builder.Services.AddResponseCompression(opts => opts.EnableForHttps = true);
+builder.Services.Configure<BrotliCompressionProviderOptions>(opts =>
+{
+	opts.Level = CompressionLevel.Optimal;
+});
+builder.Services.Configure<GzipCompressionProviderOptions>(opts =>
+{
+	opts.Level = CompressionLevel.Optimal;
+});
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services
 	.AddDbContext<MyChatContext>(opts => opts.UseNpgsql(connection))
@@ -24,8 +33,24 @@ builder.Services
 		opts.Password.RequireNonAlphanumeric = false;
 	})
 	.AddEntityFrameworkStores<MyChatContext>();
+builder.Services.AddMemoryCache();
+
+builder.Services.AddControllersWithViews(opts =>
+{
+	opts.CacheProfiles.Add("Caching", new CacheProfile()
+	{
+		Duration = 300
+	});
+	opts.CacheProfiles.Add("NoCaching", new CacheProfile()
+	{
+		Location = ResponseCacheLocation.None
+	});
+})
+    .AddViewLocalization();
 
 var app = builder.Build();
+
+app.UseResponseCompression();
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;

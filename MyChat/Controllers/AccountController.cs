@@ -16,12 +16,14 @@ public class AccountController : Controller
         _signInManager = signInManager;
     }
     [HttpGet]
+    [ResponseCache(CacheProfileName = "Caching")]
     public IActionResult Login()
     {
         return View(new LoginViewModel());
     }
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [ResponseCache(CacheProfileName = "Caching")]
     public async Task<IActionResult> Login(LoginViewModel model)
     {
         if (ModelState.IsValid)
@@ -50,12 +52,14 @@ public class AccountController : Controller
     }
 
     [HttpGet]
+    [ResponseCache(CacheProfileName = "Caching")]
     public IActionResult Register()
     {
         return View(new RegisterViewModel());
     }
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [ResponseCache(CacheProfileName = "Caching")]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
         if (ModelState.IsValid)
@@ -92,6 +96,7 @@ public class AccountController : Controller
         }
         return View(model);
     }
+    [ResponseCache(CacheProfileName = "Caching")]
     public async Task<IActionResult> Logout()
     {
         await _signInManager.SignOutAsync();
