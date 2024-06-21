@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyChat.Models;
+using MyChat.Services;
 using MyChat.ViewModels;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
@@ -87,6 +88,9 @@ public class AccountController : Controller
             {
                 await _userManager.AddToRoleAsync(user, "user");
                 await _signInManager.SignInAsync(user, isPersistent: false);
+                EmailService service = new();
+                service.SendEmail(user.Email, $"Добро пожаловать на мой сайт дорогой {user.UserName}", 
+                    $"Ваш профиль можно посмотреть по ссылке - https://localhost:7263/User/Details?name={user.UserName}");
                 return RedirectToAction("Index", "Home");
             }
             foreach (var error in result.Errors)

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MyChat.Models;
+using MyChat.Services;
 using MyChat.ViewModels;
 
 namespace MyChat.Controllers;
@@ -143,6 +139,14 @@ public class UserController : Controller
             try
             {
                 User oldUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+                string text = $"""
+                    Вы изменили свой профиль:
+                                      До - после
+                    Имя пользователя: {oldUser.UserName} - {user.UserName},
+                    Почта:            {oldUser.Email} - {user.Email},
+                    Фото профиля:     {oldUser.Avatar} - {user.Avatar},
+                    Дата рождения:    {oldUser.BirthDate} - {user.BirthDate}
+                    """;
                 oldUser.UserName = user.UserName;
                 oldUser.Email = user.Email;
                 oldUser.Avatar = user.Avatar;
@@ -150,6 +154,8 @@ public class UserController : Controller
                 _context.Update(oldUser); 
                 await _userManager.UpdateAsync(oldUser);
                 await _context.SaveChangesAsync();
+                EmailService service = new();
+                service.SendEmail(oldUser.Email, "Редактирование профиля", text);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -245,7 +251,29 @@ public class UserController : Controller
             }
         }
         return NotFound();
-
+    }
+    [Authorize]
+    public async Task<IActionResult> GetData(int id)
+    {
+        User user = await _context.Users.Include(u => u.Messages).FirstOrDefaultAsync(u => u.Id == id);
+        if (user != null)
+        {
+            string text = $"""
+                Имя пользователя - {user.UserName},
+                Email = {user.Email},
+                Дата рождения - {user.BirthDate},
+                Фото профиля - {user.Avatar},
+                Сообщения:
+                """;
+            foreach (var m in user.Messages)
+            {
+                text += "\n" + "\t" + m.Body + " " + m.Created.ToShortTimeString();
+            }
+            EmailService service = new();
+            service.SendEmail(user.Email, "Запрос на получение данных", text);
+            return RedirectToAction("Details", new {name = user.UserName});
+        }
+        return NotFound();
     }
     private bool UserExists(int id)
     {

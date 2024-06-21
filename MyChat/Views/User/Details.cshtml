@@ -22,6 +22,7 @@
             @if (User.Identity.Name == Model.UserName || User.IsInRole("admin"))
             {
                 <a asp-action="Edit" asp-route-id="@Model.Id" class="card-link">@Localizer["Edit"]</a>
+                <a asp-action="GetData" asp-route-id="@Model.Id" class="card-link">Получить данные на почту</a>
             }
         </div>
     </div>
