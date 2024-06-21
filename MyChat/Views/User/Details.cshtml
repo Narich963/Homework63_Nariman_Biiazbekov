@@ -12,7 +12,15 @@
         <img src="@Model.Avatar" class="card-img-top" style="height: 500px" alt="...">
         <div class="card-body">
             <h5 class="card-title">@Model.UserName</h5>
-            <p class="card-text">Email: @Model.Email</p>
+            @if (Model.EmailConfirmed)
+            {
+                <p class="card-text text-success">Email: @Model.Email</p>
+            }
+            else
+            {
+                <p class="card-text text-danger">Email: @Model.Email (Не подтвержден)</p>
+                <a asp-action="GetConfirmationEmail" asp-route-id="@Model.Id">Получить письмо подтверждения</a>
+            }
         </div>
         <ul class="list-group list-group-flush">
             <li class="list-group-item">@Localizer["Birth"]: @Model.BirthDate.ToLongDateString()</li>

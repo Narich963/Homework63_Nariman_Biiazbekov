@@ -275,6 +275,34 @@ public class UserController : Controller
         }
         return NotFound();
     }
+    public async Task<IActionResult> GetConfirmationEmail(int id)
+    {
+        User user = await _context.Users.FindAsync(id);
+        if (user != null)
+        {
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var callbackUrl = Url.Action("ConfirmEmail", "User", new { id = user.Id, token = token }, protocol: Request.Scheme);
+
+            EmailService service = new();
+            service.SendEmail(user.Email, "Подтверждение почты", $"""
+                Подтвердите свою почту кликнув по ссылке {callbackUrl}
+                """);
+            return RedirectToAction("Details", new { name = user.UserName });
+        }
+        return NotFound();
+    }
+    public async Task<IActionResult> ConfirmEmail(int id, string token)
+    {
+
+        var user = await _userManager.FindByIdAsync(id.ToString());
+        if (user == null)
+        {
+            return NotFound($"Unable to load user with ID '{id}'.");
+        }
+
+        var result = await _userManager.ConfirmEmailAsync(user, token);
+        return RedirectToAction("Details", new { name = user.UserName });
+    }
     private bool UserExists(int id)
     {
         return _context.Users.Any(e => e.Id == id);

@@ -32,7 +32,8 @@ builder.Services
 		opts.Password.RequireDigit = true;
 		opts.Password.RequireNonAlphanumeric = false;
 	})
-	.AddEntityFrameworkStores<MyChatContext>();
+	.AddEntityFrameworkStores<MyChatContext>()
+	.AddDefaultTokenProviders();
 builder.Services.AddMemoryCache();
 
 builder.Services.AddControllersWithViews(opts =>
